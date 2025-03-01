@@ -1,5 +1,7 @@
 #include "./player.h"
 
+#include "../utils/vector.h"
+
 void init_player(Player *player, SDL_Color color, int window_width, int window_height) {
     player->speed = 0.7;
     player->color = color;
@@ -13,23 +15,10 @@ void init_player(Player *player, SDL_Color color, int window_width, int window_h
 
 void handle_player_input(Player *player, double deltaTime) {
     bool const *keys = SDL_GetKeyboardState(NULL);
-
-    player->dx = 0;
-    player->dy = 0;
-    player->dx += (keys[SDL_SCANCODE_A] ? -1.0 : 0.0);
-    player->dx += (keys[SDL_SCANCODE_D] ? 1.0 : 0.0);
-    player->dy += (keys[SDL_SCANCODE_W] ? -1.0 : 0.0);
-    player->dy += (keys[SDL_SCANCODE_S] ? 1.0 : 0.0);
-
-    double length = SDL_sqrt(player->dx * player->dx + player->dy * player->dy);
-
-    if (length > 0) {
-        player->dx /= length;
-        player->dy /= length;
-    }
-
-    player->shape.x += player->dx * player->speed * deltaTime;
-    player->shape.y += player->dy * player->speed * deltaTime;
+    player->direction.x = (keys[SDL_SCANCODE_A] ? -1.0 : 0.0) + (keys[SDL_SCANCODE_D] ? 1.0 : 0.0);
+    player->direction.y = (keys[SDL_SCANCODE_W] ? -1.0 : 0.0) + (keys[SDL_SCANCODE_S] ? 1.0 : 0.0);
+    player->shape.x += player->direction.x * player->speed * deltaTime;
+    player->shape.y += player->direction.y * player->speed * deltaTime;
 }
 
 void update_player(Player *player, int window_width, int window_height) {
@@ -65,4 +54,15 @@ void render_player(Player *player, SDL_Renderer *renderer) {
         SDL_SetRenderDrawColor(renderer, player->color.r, player->color.g, player->color.b, player->color.a);
         SDL_RenderFillRect(renderer, &player->ghost_shape);
     }
+
+    render_gizmos(player, renderer);
+}
+
+void render_gizmos(Player *player, SDL_Renderer *renderer) {
+    float mx, my;
+    SDL_GetMouseState(&mx, &my);
+    float px = player->shape.x + player->shape.w / 2;
+    float py = player->shape.y + player->shape.h / 2;
+    Vector2D line = normalized(&(Vector2D){.x = mx - px, .y = my - py});
+    SDL_RenderLine(renderer, px, py, px + line.x * 100, py + line.y * 100);
 }
