@@ -1,15 +1,17 @@
 #include "./player.h"
 
-void init_player(Player *player, SDL_Color color) {
+void init_player(Player *player, SDL_Color color, int window_width, int window_height) {
     player->speed = 0.7;
     player->color = color;
-    player->shape = (SDL_FRect){.x = 0, .y = 0, .w = 50, .h = 50};
-    player->ghost_shape = (SDL_FRect){.x = 0, .y = 0, .w = 50, .h = 50};
+
+    int w = 50, h = 50;
+    int x = window_width / 2 - w / 2;
+    int y = window_height / 2 - h / 2;
+    player->shape = (SDL_FRect){.x = x, .y = y, .w = w, .h = h};
+    player->ghost_shape = (SDL_FRect){.x = x, .y = y, .w = w, .h = h};
 }
 
 void handle_player_input(Player *player, double deltaTime) {
-    SDL_Event event_val;
-    SDL_Event *event = &event_val;
     bool const *keys = SDL_GetKeyboardState(NULL);
 
     player->dx = 0;
@@ -31,8 +33,7 @@ void handle_player_input(Player *player, double deltaTime) {
 }
 
 void update_player(Player *player, int window_width, int window_height) {
-    player->ghost_shape.x = player->shape.x;
-    player->ghost_shape.y = player->shape.y;
+    player->ghost_shape = player->shape;
     player->is_clipping_x = (player->shape.x < 0) || (player->shape.x + player->shape.w > window_width);
     player->is_clipping_y = (player->shape.y < 0) || (player->shape.y + player->shape.h > window_height);
 
@@ -52,8 +53,7 @@ void update_player(Player *player, int window_width, int window_height) {
         player->shape.y > window_height) {
         player->shape.x = player->ghost_shape.x;
         player->shape.y = player->ghost_shape.y;
-        player->is_clipping_x = false;
-        player->is_clipping_y = false;
+        player->is_clipping_x = player->is_clipping_y = false;
     }
 }
 

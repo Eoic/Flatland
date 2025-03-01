@@ -30,7 +30,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     }
 
     surface = SDL_CreateSurface(WIDTH, HEIGHT, SDL_PIXELFORMAT_ARGB32);
-    init_player(&player, (SDL_Color){.a = 255, .r = 255, .g = 128, .b = 64});
+    init_player(&player, (SDL_Color){.a = 255, .r = 255, .g = 128, .b = 64}, win_width, win_height);
 
     return SDL_APP_CONTINUE;
 }

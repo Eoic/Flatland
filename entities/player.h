@@ -12,7 +12,7 @@ typedef struct {
     SDL_Color color;
 } Player;
 
-void init_player(Player *player, SDL_Color color);
+void init_player(Player *player, SDL_Color color, int window_width, int window_height);
 void handle_player_input(Player *player, double deltaTime);
 void update_player(Player *player, int window_width, int window_height);
 void render_player(Player *player, SDL_Renderer *rendered);
