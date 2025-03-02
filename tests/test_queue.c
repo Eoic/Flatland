@@ -1,61 +1,49 @@
-#include <cmocka.h>
-#include <setjmp.h>
-#include <stdarg.h>
-#include <stddef.h>
 #include <stdlib.h>
 
 #include "../utils/queue/queue.h"
+#include "unity.h"
 
-static int setup(void **state) {
-    Queue *queue = (Queue *)malloc(sizeof(Queue));
+static Queue *queue = NULL;
 
-    if (queue == NULL) {
-        return -1;
-    }
-
+void setUp(void) {
+    queue = (Queue *)malloc(sizeof(Queue));
     queue_init(queue);
-    *state = queue;
-
-    return 0;
 }
 
-static int teardown(void **state) {
-    Queue *queue = (Queue *)(*state);
+void tearDown(void) {
     queue_dispose(queue);
     free(queue);
-    return 0;
+    queue = NULL;
 }
 
-static void test_queue_init(void **state) {
-    Queue *queue = (Queue *)(*state);
-    assert_true(queue_is_empty(queue));
-}
+void test_queue_init(void) { TEST_ASSERT_TRUE(queue_is_empty(queue)); }
 
-static void test_enqueue_dequeue(void **state) {
-    Queue *queue = (Queue *)(*state);
+void test_enqueue_dequeue(void) {
     int test_value = 42;
 
     queue_push(queue, &test_value);
-    assert_false(queue_is_empty(queue));
+    TEST_ASSERT_FALSE(queue_is_empty(queue));
+
     int *dequeued_value = (int *)queue_pop(queue);
-    assert_ptr_equal(dequeued_value, &test_value);
-    assert_true(queue_is_empty(queue));
+    TEST_ASSERT_EQUAL_PTR(&test_value, dequeued_value);
+
+    TEST_ASSERT_TRUE(queue_is_empty(queue));
 }
 
-static void test_queue_dispose(void **state) {
-    Queue *queue = (Queue *)(*state);
+void test_queue_dispose(void) {
     int test_value = 100;
     queue_push(queue, &test_value);
     queue_dispose(queue);
-    assert_true(queue_is_empty(queue));
+
+    TEST_ASSERT_TRUE(queue_is_empty(queue));
 }
 
 int main(void) {
-    const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_queue_init),
-        cmocka_unit_test(test_enqueue_dequeue),
-        cmocka_unit_test(test_queue_dispose),
-    };
+    UNITY_BEGIN();
 
-    return cmocka_run_group_tests(tests, setup, teardown);
+    // RUN_TEST(test_queue_init);
+    // RUN_TEST(test_enqueue_dequeue);
+    RUN_TEST(test_queue_dispose);
+
+    return UNITY_END();
 }

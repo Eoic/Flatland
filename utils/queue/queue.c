@@ -57,7 +57,6 @@ void queue_dispose(Queue *queue) {
     while (current != NULL) {
         QueueNode *temp = current;
         current = current->next;
-        free(temp->data);
         free(temp);
     }
 

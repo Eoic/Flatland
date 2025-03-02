@@ -52,8 +52,22 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# IDEs
-.vscode
-
-# Other.
+# CMake.
+CMakeLists.txt.user
+CMakeCache.txt
 CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+CMakeUserPresets.json
+
+# Build
+build/debug/**
+!build/debug/.gitkeep
+build/release/**
+!build/release/.gitkeep
