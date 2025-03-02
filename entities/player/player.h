@@ -3,7 +3,9 @@
 
 #include <SDL3/SDL.h>
 
-#include "../utils/vector.h"
+#include "../../utils/vector/vector.h"
+
+extern const Uint8 PLAYER_SIZE;
 
 typedef struct {
     double speed;

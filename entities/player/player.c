@@ -1,22 +1,26 @@
 #include "./player.h"
 
-#include "../utils/vector.h"
+#include "../../utils/vector/vector.h"
+
+const Uint8 PLAYER_SIZE = 75;
 
 void init_player(Player *player, SDL_Color color, int window_width, int window_height) {
     player->speed = 0.7;
     player->color = color;
 
-    int w = 50, h = 50;
-    int x = window_width / 2 - w / 2;
-    int y = window_height / 2 - h / 2;
-    player->shape = (SDL_FRect){.x = x, .y = y, .w = w, .h = h};
-    player->ghost_shape = (SDL_FRect){.x = x, .y = y, .w = w, .h = h};
+    int x = window_width / 2 - PLAYER_SIZE / 2;
+    int y = window_height / 2 - PLAYER_SIZE / 2;
+    player->shape = (SDL_FRect){.x = x, .y = y, .w = PLAYER_SIZE, .h = PLAYER_SIZE};
+    player->ghost_shape = (SDL_FRect){.x = x, .y = y, .w = PLAYER_SIZE, .h = PLAYER_SIZE};
 }
 
 void handle_player_input(Player *player, double deltaTime) {
     bool const *keys = SDL_GetKeyboardState(NULL);
-    player->direction.x = (keys[SDL_SCANCODE_A] ? -1.0 : 0.0) + (keys[SDL_SCANCODE_D] ? 1.0 : 0.0);
-    player->direction.y = (keys[SDL_SCANCODE_W] ? -1.0 : 0.0) + (keys[SDL_SCANCODE_S] ? 1.0 : 0.0);
+    player->direction.x = (keys[SDL_SCANCODE_A] | keys[SDL_SCANCODE_LEFT] ? -1.0 : 0.0) +
+                          (keys[SDL_SCANCODE_D] | keys[SDL_SCANCODE_RIGHT] ? 1.0 : 0.0);
+    player->direction.y = (keys[SDL_SCANCODE_W] | keys[SDL_SCANCODE_UP] ? -1.0 : 0.0) +
+                          (keys[SDL_SCANCODE_S] | keys[SDL_SCANCODE_DOWN] ? 1.0 : 0.0);
+    player->direction = normalized(&player->direction);
     player->shape.x += player->direction.x * player->speed * deltaTime;
     player->shape.y += player->direction.y * player->speed * deltaTime;
 }

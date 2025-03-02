@@ -3,8 +3,8 @@
 #include <SDL3/SDL_main.h>
 #include <stdio.h>
 
-#include "entities/player.h"
-#include "utils/vector.h";
+#include "entities/player/player.h"
+#include "utils/vector/vector.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;

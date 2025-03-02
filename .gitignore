@@ -54,3 +54,6 @@ dkms.conf
 
 # IDEs
 .vscode
+
+# Other.
+CMakeFiles
