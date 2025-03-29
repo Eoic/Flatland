@@ -17,8 +17,8 @@ target_sources(Flatland PRIVATE ${ENTITIES_SOURCES} ${UTILS_SOURCES})
 target_link_libraries(Flatland PRIVATE SDL3::SDL3 m)
 
 # Libraries.
-file(GLOB_RECURSE QUEUE_SOURCES "utils/queue/*.c")
-add_library(queue STATIC ${QUEUE_SOURCES})
-target_include_directories(queue PUBLIC utils/queue)
-target_include_directories(Flatland PUBLIC "${PROJECT_BINARY_DIR}")
+#file(GLOB_RECURSE QUEUE_SOURCES "utils/queue/*.c")
+#add_library(queue STATIC ${QUEUE_SOURCES})
+#target_include_directories(queue PUBLIC utils/queue)
+#target_include_directories(Flatland PUBLIC "${PROJECT_BINARY_DIR}")
 

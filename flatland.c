@@ -1,10 +1,11 @@
+#include <stddef.h>
 #define SDL_MAIN_USE_CALLBACKS 1 /* use the callbacks instead of main() */
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <stdio.h>
 
 #include "entities/player/player.h"
-#include "utils/vector/vector.h"
+#include "utils/stack/stack.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
