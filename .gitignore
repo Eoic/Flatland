@@ -68,6 +68,8 @@ CMakeUserPresets.json
 
 # Build
 build/debug/**
+out/
 !build/debug/.gitkeep
 build/release/**
 !build/release/.gitkeep
+.cache/
